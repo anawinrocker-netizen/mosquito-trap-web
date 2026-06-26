@@ -1,0 +1,22 @@
+# Dependencies (เผื่ออนาคตถ้ามีการใช้ npm)
+node_modules/
+
+# OS / editor junk
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Vercel
+.vercel
+
+# Local env files (ถ้ามีในอนาคต)
+.env
+.env.local
+.env.*.local
+
+# หมายเหตุ: ค่า Firebase web config (apiKey ฯลฯ) ใน js/firebase-config.js
+# ปลอดภัยที่จะ commit ขึ้น public ได้ เพราะเป็น client-side config
+# (ความปลอดภัยจริงคุมด้วย Firebase Security Rules) — จึงไม่ต้อง ignore

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>กับดักยุงอัจฉริยะ — นับไข่ยุงลายด้วย Edge AI</title>
+<meta name="description" content="ระบบเฝ้าระวังไข้เลือดออกเชิงรุก นับไข่ยุงลายด้วย Edge AI" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+<!-- ===================== SHARED HEADER / NAV ===================== -->
+<header class="site-header">
+  <nav class="nav">
+    <a class="nav-brand" href="index.html" aria-label="หน้าแรก">
+      <span class="logo"><i data-lucide="radar"></i></span>
+      <span class="name">กับดักยุงอัจฉริยะ<span class="en en-dark">Smart Mosquito Trap</span></span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="active">หน้าแรก</a>
+      <a href="dashboard.html">แดชบอร์ด</a>
+      <a href="map.html">แผนที่</a>
+    </div>
+    <div class="nav-auth" id="navAuth">
+      <a class="btn btn-primary btn-sm" href="login.html">เข้าสู่ระบบ <span class="en">Sign in</span></a>
+    </div>
+  </nav>
+</header>
+
+<main>
+  <!-- ===================== HERO ===================== -->
+  <section class="landing-hero">
+    <div class="wrap">
+      <span class="eyebrow">โครงงานวิทยาศาสตร์ · Edge AI Dengue Surveillance</span>
+      <h1>กับดักยุงอัจฉริยะ</h1>
+      <div class="sub-en">Smart Mosquito Trap · Edge AI Dengue Surveillance</div>
+      <p class="purpose">เฝ้าระวังไข้เลือดออกเชิงรุก โดยนับไข่ยุงลายด้วย AI และเตือนก่อนการระบาด</p>
+      <div class="hero-cta">
+        <a class="btn btn-light" href="login.html">เข้าสู่ระบบ <span class="en">Sign in</span></a>
+        <a class="btn btn-ghost" href="map.html">ดูแผนที่ความเสี่ยง <span class="en">Risk Map</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== ABOUT ===================== -->
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <h2>เกี่ยวกับโครงงาน<span class="en">About the Project</span></h2>
+      </div>
+      <div class="about-grid">
+        <div class="about-card reveal glass-liquid warm">
+          <h3><i data-lucide="bug"></i>ปัญหา<span class="en">The problem</span></h3>
+          <p>ไข้เลือดออกเป็นโรคประจำถิ่นที่ระบาดซ้ำทุกปีในประเทศไทย โดยมียุงลายเป็นพาหะ
+          การเฝ้าระวังแบบเดิมอาศัยการนับลูกน้ำและไข่ด้วยคนซึ่งช้า ใช้แรงงานมาก
+          และมักรู้ตัวก็ต่อเมื่อเริ่มมีผู้ป่วยแล้ว</p>
+        </div>
+        <div class="about-card reveal glass-liquid warm">
+          <h3><i data-lucide="lightbulb"></i>แนวทางแก้<span class="en">Our solution</span></h3>
+          <p>กับดักไข่ยุง (ovitrap) ติดกล้องถ่ายไม้กดลิ้น แล้วใช้ Edge AI นับจำนวนไข่ยุงลายอัตโนมัติ
+          จัดระดับความเสี่ยง 4 ระดับ ส่งข้อมูลขึ้น Firebase แบบเรียลไทม์
+          และเตือนล่วงหน้าเมื่อไข่เพิ่มเร็วผิดปกติ — เปลี่ยนการเฝ้าระวังให้ "นำหน้า" การระบาด</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== HOW TO USE ===================== -->
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <h2>วิธีใช้งาน<span class="en">How to Use</span></h2>
+        <p>เริ่มต้นใช้งานระบบใน 4 ขั้นตอน</p>
+      </div>
+      <div class="steps">
+        <div class="step reveal glass-liquid warm">
+          <div class="num">1</div>
+          <h4>ล็อกอิน<span class="en">Sign in</span></h4>
+          <p>เข้าสู่ระบบด้วยบัญชีของทีมเพื่อเข้าถึงข้อมูลกับดัก</p>
+        </div>
+        <div class="step reveal glass-liquid warm">
+          <div class="num">2</div>
+          <h4>ดูแดชบอร์ด<span class="en">View dashboard</span></h4>
+          <p>ตรวจระดับความเสี่ยงวันนี้ จำนวนไข่ และแนวโน้ม 7 วัน</p>
+        </div>
+        <div class="step reveal glass-liquid warm">
+          <div class="num">3</div>
+          <h4>ดูแผนที่จุดเสี่ยง<span class="en">Risk map</span></h4>
+          <p>สำรวจจุดเสี่ยงทั่วประเทศบนแผนที่ความร้อน (heatmap)</p>
+        </div>
+        <div class="step reveal glass-liquid warm">
+          <div class="num">4</div>
+          <h4>รับแจ้งเตือน<span class="en">Get alerts</span></h4>
+          <p>รับการแจ้งเตือนผ่าน Telegram ทันทีเมื่อไข่เกินเกณฑ์เสี่ยง</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== FEATURES ===================== -->
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <h2>คุณสมบัติเด่น<span class="en">Key Features</span></h2>
+      </div>
+      <div class="feature-grid">
+        <div class="feature reveal glass-liquid warm">
+          <div class="ico"><i data-lucide="scan-eye"></i></div>
+          <h4>นับไข่ด้วย Edge AI<span class="en">Edge AI egg counting</span></h4>
+          <p>โมเดล AI ประมวลผลบนอุปกรณ์ นับไข่ยุงลายจากภาพไม้กดลิ้นได้ทันที</p>
+        </div>
+        <div class="feature reveal glass-liquid warm">
+          <div class="ico"><i data-lucide="activity"></i></div>
+          <h4>แดชบอร์ดเรียลไทม์<span class="en">Real-time dashboard</span></h4>
+          <p>แสดงระดับความเสี่ยง จำนวนไข่ และกราฟแนวโน้มแบบสด ๆ</p>
+        </div>
+        <div class="feature reveal glass-liquid warm">
+          <div class="ico"><i data-lucide="map-pin"></i></div>
+          <h4>แผนที่ความเสี่ยงทั่วไทย<span class="en">Thailand risk heatmap</span></h4>
+          <p>รวมข้อมูลกับดักหลายจุดเป็นแผนที่ความร้อน เห็นพื้นที่เสี่ยงชัดเจน</p>
+        </div>
+        <div class="feature reveal glass-liquid warm">
+          <div class="ico"><i data-lucide="send"></i></div>
+          <h4>แจ้งเตือนผ่าน Telegram<span class="en">Telegram alerts</span></h4>
+          <p>ส่งข้อความเตือนอัตโนมัติเมื่อไข่เกินเกณฑ์ ถึงมือเจ้าหน้าที่ทันที</p>
+        </div>
+        <div class="feature reveal glass-liquid warm">
+          <div class="ico"><i data-lucide="trending-up"></i></div>
+          <h4>ทำนายจากอัตราการเพิ่ม<span class="en">Rate-of-change prediction</span></h4>
+          <p>เตือนล่วงหน้าเมื่อไข่เพิ่มเร็วผิดปกติ แม้ระดับยังไม่สูง</p>
+        </div>
+        <div class="feature reveal glass-liquid warm">
+          <div class="ico"><i data-lucide="lock"></i></div>
+          <h4>เข้าถึงปลอดภัย<span class="en">Secure access</span></h4>
+          <p>ป้องกันข้อมูลด้วยระบบล็อกอิน เฉพาะสมาชิกทีมเท่านั้น</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ===================== SHARED FOOTER ===================== -->
+<footer class="site-footer">
+  <div class="footer-grid">
+    <div class="f-brand">
+      <div class="nm"><i data-lucide="radar"></i> กับดักยุงอัจฉริยะ</div>
+      <p>เฝ้าระวังไข้เลือดออกเชิงรุกด้วย Edge AI<br>
+        <span class="f-en">Proactive dengue surveillance with Edge AI</span></p>
+      <span class="footer-tag">ต้นแบบ · Proof of Concept</span>
+    </div>
+    <div>
+      <h4>โรงเรียน<span class="en" style="color:#7A8199">School</span></h4>
+      <p>โรงเรียนวิทยาศาสตร์จุฬาภรณราชวิทยาลัย ตรัง<br>
+        <span class="f-en">Princess Chulabhorn Science High School Trang</span><br>
+        ปีการศึกษา 2569</p>
+    </div>
+    <div>
+      <h4>ผู้พัฒนา<span class="en" style="color:#7A8199">Developers</span></h4>
+      <ul>
+        <li>นายพงศภัค จรเสมอ</li>
+        <li>นายอนาวิล เก้าเอี้ยน</li>
+        <li>นางสาวภัททิยา ภิรมย์ทอง</li>
+        <li>นางสาวศิริณ เล็มมณี</li>
+        <li>นางสาวภณิตา โต๊ะเส็น</li>
+      </ul>
+      <p style="margin-top:12px">ครูที่ปรึกษา <span class="f-en">Advisor</span><br>ครูสัญชัย เรืองอินทร์</p>
+    </div>
+    <div>
+      <h4>ลิงก์ลัด<span class="en" style="color:#7A8199">Quick links</span></h4>
+      <ul>
+        <li><a href="index.html">หน้าแรก</a></li>
+        <li><a href="dashboard.html">แดชบอร์ด</a></li>
+        <li><a href="map.html">แผนที่</a></li>
+        <li><a href="login.html">เข้าสู่ระบบ</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">© 2569 · จัดทำเพื่อการศึกษา / Educational project</div>
+</footer>
+
+<!-- ===================== SCRIPTS ===================== -->
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script src="js/background.js"></script>
+<script src="js/liquid.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/data.js"></script>
+<script src="js/auth.js"></script>
+<script>
+  // Draw all static Lucide icons on the page.
+  if (window.lucide) lucide.createIcons();
+
+  // Reflect auth state in the nav (shows email + logout if signed in).
+  renderNavAuth(false);
+
+  // Scroll-reveal animations.
+  (function(){
+    const reduce = window.matchMedia("(prefers-reduced-motion:reduce)").matches;
+    const els = document.querySelectorAll(".reveal");
+    if (reduce || !("IntersectionObserver" in window)){
+      els.forEach(e => e.classList.add("in"));
+      return;
+    }
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(en=>{ if (en.isIntersecting){ en.target.classList.add("in"); io.unobserve(en.target); } });
+    }, { threshold:.15 });
+    els.forEach(e => io.observe(e));
+  })();
+</script>
+</body>
+</html>

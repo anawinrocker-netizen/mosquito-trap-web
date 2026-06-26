@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>แผนที่ความเสี่ยง · กับดักยุงอัจฉริยะ</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+<link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+<!-- ===================== SHARED HEADER / NAV ===================== -->
+<header class="site-header">
+  <nav class="nav">
+    <a class="nav-brand" href="index.html" aria-label="หน้าแรก">
+      <span class="logo"><i data-lucide="radar"></i></span>
+      <span class="name">กับดักยุงอัจฉริยะ<span class="en en-dark">Smart Mosquito Trap</span></span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html">หน้าแรก</a>
+      <a href="dashboard.html">แดชบอร์ด</a>
+      <a href="map.html" class="active">แผนที่</a>
+    </div>
+    <div class="nav-auth" id="navAuth"></div>
+  </nav>
+  <div class="subbar">
+    <div class="subbar-inner">
+      <div class="page-title">แผนที่ความเสี่ยง<span class="en">Risk Map</span></div>
+      <div class="status-dot live" id="statusDot">
+        <span class="dot"></span>
+        <span id="statusText">เรียลไทม์ / Live</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <!-- Summary strip -->
+    <div class="map-strip">
+      <h2>แผนที่ความเสี่ยงยุงลาย<span class="en">Aedes Risk Map</span></h2>
+      <div class="map-counts" id="mapCounts">กำลังโหลด… / Loading…</div>
+    </div>
+
+    <!-- Empty state note -->
+    <div class="map-empty" id="mapEmpty" hidden>
+      ยังไม่มีข้อมูลกับดักในระบบ — เปิดแดชบอร์ดแล้วกด “ใส่ข้อมูลตัวอย่าง” เพื่อทดลอง
+      <span class="en">No trap data yet — use “Seed sample data” on the dashboard to preview</span>
+    </div>
+
+    <!-- Leaflet map -->
+    <div id="map" role="region" aria-label="แผนที่ความเสี่ยงยุงลายของประเทศไทย"></div>
+  </div>
+</main>
+
+<!-- ===================== SHARED FOOTER ===================== -->
+<footer class="site-footer">
+  <div class="footer-grid">
+    <div class="f-brand">
+      <div class="nm"><i data-lucide="radar"></i> กับดักยุงอัจฉริยะ</div>
+      <p>เฝ้าระวังไข้เลือดออกเชิงรุกด้วย Edge AI<br>
+        <span class="f-en">Proactive dengue surveillance with Edge AI</span></p>
+      <span class="footer-tag">ต้นแบบ · Proof of Concept</span>
+    </div>
+    <div>
+      <h4>โรงเรียน<span class="en" style="color:#7A8199">School</span></h4>
+      <p>โรงเรียนวิทยาศาสตร์จุฬาภรณราชวิทยาลัย ตรัง<br>
+        <span class="f-en">Princess Chulabhorn Science High School Trang</span><br>
+        ปีการศึกษา 2569</p>
+    </div>
+    <div>
+      <h4>ผู้พัฒนา<span class="en" style="color:#7A8199">Developers</span></h4>
+      <ul>
+        <li>นายพงศภัค จรเสมอ</li>
+        <li>นายอนาวิล เก้าเอี้ยน</li>
+        <li>นางสาวภัททิยา ภิรมย์ทอง</li>
+        <li>นางสาวศิริณ เล็มมณี</li>
+        <li>นางสาวภณิตา โต๊ะเส็น</li>
+      </ul>
+      <p style="margin-top:12px">ครูที่ปรึกษา <span class="f-en">Advisor</span><br>ครูสัญชัย เรืองอินทร์</p>
+    </div>
+    <div>
+      <h4>ลิงก์ลัด<span class="en" style="color:#7A8199">Quick links</span></h4>
+      <ul>
+        <li><a href="index.html">หน้าแรก</a></li>
+        <li><a href="dashboard.html">แดชบอร์ด</a></li>
+        <li><a href="map.html">แผนที่</a></li>
+        <li><a href="login.html">เข้าสู่ระบบ</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">© 2569 · จัดทำเพื่อการศึกษา / Educational project</div>
+</footer>
+
+<!-- ===================== SCRIPTS ===================== -->
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script src="js/background.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/data.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/map.js"></script>
+<script>
+  if (window.lucide) lucide.createIcons();
+  renderNavAuth(true);
+  requireAuth(function(user){ initMapPage(user); });
+</script>
+</body>
+</html>

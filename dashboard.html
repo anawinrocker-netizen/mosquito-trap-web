@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>แดชบอร์ด · กับดักยุงอัจฉริยะ</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+<!-- ===================== SHARED HEADER / NAV ===================== -->
+<header class="site-header">
+  <nav class="nav">
+    <a class="nav-brand" href="index.html" aria-label="หน้าแรก">
+      <span class="logo"><i data-lucide="radar"></i></span>
+      <span class="name">กับดักยุงอัจฉริยะ<span class="en en-dark">Smart Mosquito Trap</span></span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html">หน้าแรก</a>
+      <a href="dashboard.html" class="active">แดชบอร์ด</a>
+      <a href="map.html">แผนที่</a>
+    </div>
+    <div class="nav-auth" id="navAuth"></div>
+  </nav>
+
+  <!-- sub-bar: page title, updated time, bell, status -->
+  <div class="subbar">
+    <div class="subbar-inner">
+      <div class="page-title">แดชบอร์ดกับดัก<span class="en">Trap Dashboard</span></div>
+      <div class="updated">
+        <div id="updatedRel">อัปเดต —</div>
+        <div class="abs" id="updatedAbs">—</div>
+      </div>
+      <button class="bell" id="bell" aria-label="การแจ้งเตือน Alerts">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+        </svg>
+        <span class="badge" id="bellBadge" hidden>0</span>
+      </button>
+      <div class="status-dot" id="statusDot">
+        <span class="dot"></span>
+        <span id="statusText">กำลังเชื่อมต่อ / Connecting</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+
+    <!-- Urgent alert bar (conditional) -->
+    <div class="alert-bar" id="alertBar" hidden role="alert">
+      <div class="ico"><i data-lucide="triangle-alert"></i></div>
+      <div class="body">
+        <strong id="alertTitle">—</strong>
+        <span class="en" id="alertTitleEn">—</span>
+        <div class="detail" id="alertDetail">—</div>
+      </div>
+      <button class="close" id="alertClose" aria-label="ปิด Dismiss">×</button>
+    </div>
+
+    <!-- Hero risk card -->
+    <div class="hero skeleton glass-liquid cool" id="hero">
+      <div class="hero-inner">
+        <div class="hero-left">
+          <div class="eyebrow">ระดับความเสี่ยงวันนี้<span class="en">Today's Risk Level</span></div>
+          <div class="hero-level" id="heroLevel">กำลังโหลด…</div>
+          <div class="hero-reco" id="heroReco">—<span class="en" id="heroRecoEn"></span></div>
+        </div>
+        <div class="hero-right">
+          <!-- SIGNATURE: radar "risk pulse" — color = current level,
+               pulse speed scales with rate-of-change (set via JS CSS vars).
+               Reduced-motion shows the static dial ring only. -->
+          <div class="risk-pulse" aria-hidden="true">
+            <span class="pulse-ring r1"></span>
+            <span class="pulse-ring r2"></span>
+            <span class="pulse-ring r3"></span>
+            <div class="pulse-core">
+              <div class="egg-num" id="eggNum">0</div>
+              <div class="egg-label">จำนวนไข่<span class="en">Eggs counted</span></div>
+            </div>
+          </div>
+          <div class="roc flat" id="roc">— <span class="en">เทียบครั้งก่อน / vs previous</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4-level ladder -->
+    <div class="card">
+      <div class="card-title">ระดับความเสี่ยง 4 ระดับ<span class="en">4 Risk Levels — tap to learn more</span></div>
+      <div class="ladder" id="ladder"></div>
+    </div>
+
+    <!-- 7-day trend chart -->
+    <div class="card glass-liquid cool">
+      <div class="card-title">แนวโน้ม 7 วัน<span class="en">7-Day Egg Count Trend</span></div>
+      <div class="chart-box">
+        <canvas id="trendChart"></canvas>
+        <div class="empty" id="chartEmpty" hidden>ยังไม่มีข้อมูล รออุปกรณ์ส่งข้อมูล<span class="en">No data yet — waiting for device</span></div>
+      </div>
+    </div>
+
+    <!-- Telegram alert history -->
+    <div class="card">
+      <div class="card-head">
+        <div class="card-title">ประวัติการแจ้งเตือน Telegram<span class="en">Telegram Alert History</span></div>
+        <button class="btn btn-outline btn-sm" id="seedBtn" title="เขียนข้อมูลตัวอย่างลง Firebase">
+          ใส่ข้อมูลตัวอย่าง <span class="en">Seed sample data</span>
+        </button>
+      </div>
+      <div class="alert-list" id="alertList">
+        <div class="empty">กำลังโหลด…<span class="en">Loading…</span></div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- ===================== SHARED FOOTER ===================== -->
+<footer class="site-footer">
+  <div class="footer-grid">
+    <div class="f-brand">
+      <div class="nm"><i data-lucide="radar"></i> กับดักยุงอัจฉริยะ</div>
+      <p>เฝ้าระวังไข้เลือดออกเชิงรุกด้วย Edge AI<br>
+        <span class="f-en">Proactive dengue surveillance with Edge AI</span></p>
+      <span class="footer-tag">ต้นแบบ · Proof of Concept</span>
+    </div>
+    <div>
+      <h4>โรงเรียน<span class="en" style="color:#7A8199">School</span></h4>
+      <p>โรงเรียนวิทยาศาสตร์จุฬาภรณราชวิทยาลัย ตรัง<br>
+        <span class="f-en">Princess Chulabhorn Science High School Trang</span><br>
+        ปีการศึกษา 2569</p>
+    </div>
+    <div>
+      <h4>ผู้พัฒนา<span class="en" style="color:#7A8199">Developers</span></h4>
+      <ul>
+        <li>นายพงศภัค จรเสมอ</li>
+        <li>นายอนาวิล เก้าเอี้ยน</li>
+        <li>นางสาวภัททิยา ภิรมย์ทอง</li>
+        <li>นางสาวศิริณ เล็มมณี</li>
+        <li>นางสาวภณิตา โต๊ะเส็น</li>
+      </ul>
+      <p style="margin-top:12px">ครูที่ปรึกษา <span class="f-en">Advisor</span><br>ครูสัญชัย เรืองอินทร์</p>
+    </div>
+    <div>
+      <h4>ลิงก์ลัด<span class="en" style="color:#7A8199">Quick links</span></h4>
+      <ul>
+        <li><a href="index.html">หน้าแรก</a></li>
+        <li><a href="dashboard.html">แดชบอร์ด</a></li>
+        <li><a href="map.html">แผนที่</a></li>
+        <li><a href="login.html">เข้าสู่ระบบ</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">© 2569 · จัดทำเพื่อการศึกษา / Educational project</div>
+</footer>
+
+<!-- ===================== SCRIPTS ===================== -->
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script src="js/background.js"></script>
+<script src="js/liquid.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/data.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/seed.js"></script>
+<script src="js/dashboard.js"></script>
+<script>
+  // Draw static Lucide icons (nav, alert bar, footer).
+  if (window.lucide) lucide.createIcons();
+
+  // Show user email + logout in nav; redirect to login if signed out.
+  renderNavAuth(true);
+  requireAuth(function(user){ initDashboard(user); });
+</script>
+</body>
+</html>

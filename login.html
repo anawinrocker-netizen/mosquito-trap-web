@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>เข้าสู่ระบบ · กับดักยุงอัจฉริยะ</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+<!-- ===================== SHARED HEADER / NAV ===================== -->
+<header class="site-header">
+  <nav class="nav">
+    <a class="nav-brand" href="index.html" aria-label="หน้าแรก">
+      <span class="logo"><i data-lucide="radar"></i></span>
+      <span class="name">กับดักยุงอัจฉริยะ<span class="en en-dark">Smart Mosquito Trap</span></span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html">หน้าแรก</a>
+      <a href="dashboard.html">แดชบอร์ด</a>
+      <a href="map.html">แผนที่</a>
+    </div>
+    <div class="nav-auth" id="navAuth"></div>
+  </nav>
+</header>
+
+<!-- ===================== AUTH CARD ===================== -->
+<div class="auth-shell">
+  <div class="auth-card">
+    <div class="brand-mini">
+      <div class="logo"><i data-lucide="radar"></i></div>
+      <div class="nm">กับดักยุงอัจฉริยะ<span class="en">Smart Mosquito Trap</span></div>
+    </div>
+
+    <div class="auth-tabs" role="tablist" aria-label="โหมดเข้าสู่ระบบ">
+      <button id="tabSignin" role="tab" aria-selected="true">เข้าสู่ระบบ</button>
+      <button id="tabSignup" role="tab" aria-selected="false">สมัครสมาชิก</button>
+    </div>
+
+    <div class="form-title" id="formTitle">ยินดีต้อนรับกลับ<span class="en">Welcome back</span></div>
+
+    <div class="auth-error" id="authError" hidden></div>
+
+    <form id="authForm" novalidate>
+      <div class="field">
+        <label for="email">อีเมล <span class="en" style="display:inline">Email</span></label>
+        <div class="input-wrap">
+          <input type="email" id="email" autocomplete="email" placeholder="you@example.com" required />
+        </div>
+      </div>
+      <div class="field">
+        <label for="password">รหัสผ่าน <span class="en" style="display:inline">Password</span></label>
+        <div class="input-wrap">
+          <input type="password" id="password" autocomplete="current-password" placeholder="••••••••" required />
+          <button type="button" class="toggle-pass" id="togglePass" aria-label="แสดงรหัสผ่าน"><i data-lucide="eye"></i></button>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary auth-submit" id="submitBtn">
+        เข้าสู่ระบบ <span class="en">Sign in</span>
+      </button>
+    </form>
+
+    <div class="auth-divider">หรือ / or</div>
+    <button class="btn btn-google" id="googleBtn">
+      <span class="g">G</span> เข้าสู่ระบบด้วย Google <span class="en">Sign in with Google</span>
+    </button>
+
+    <div class="auth-back"><a href="index.html">← กลับหน้าแรก / Back to home</a></div>
+  </div>
+</div>
+
+<!-- ===================== SHARED FOOTER ===================== -->
+<footer class="site-footer">
+  <div class="footer-grid">
+    <div class="f-brand">
+      <div class="nm"><i data-lucide="radar"></i> กับดักยุงอัจฉริยะ</div>
+      <p>เฝ้าระวังไข้เลือดออกเชิงรุกด้วย Edge AI<br>
+        <span class="f-en">Proactive dengue surveillance with Edge AI</span></p>
+      <span class="footer-tag">ต้นแบบ · Proof of Concept</span>
+    </div>
+    <div>
+      <h4>โรงเรียน<span class="en" style="color:#7A8199">School</span></h4>
+      <p>โรงเรียนวิทยาศาสตร์จุฬาภรณราชวิทยาลัย ตรัง<br>
+        <span class="f-en">Princess Chulabhorn Science High School Trang</span><br>
+        ปีการศึกษา 2569</p>
+    </div>
+    <div>
+      <h4>ผู้พัฒนา<span class="en" style="color:#7A8199">Developers</span></h4>
+      <ul>
+        <li>นายพงศภัค จรเสมอ</li>
+        <li>นายอนาวิล เก้าเอี้ยน</li>
+        <li>นางสาวภัททิยา ภิรมย์ทอง</li>
+        <li>นางสาวศิริณ เล็มมณี</li>
+        <li>นางสาวภณิตา โต๊ะเส็น</li>
+      </ul>
+      <p style="margin-top:12px">ครูที่ปรึกษา <span class="f-en">Advisor</span><br>ครูสัญชัย เรืองอินทร์</p>
+    </div>
+    <div>
+      <h4>ลิงก์ลัด<span class="en" style="color:#7A8199">Quick links</span></h4>
+      <ul>
+        <li><a href="index.html">หน้าแรก</a></li>
+        <li><a href="dashboard.html">แดชบอร์ด</a></li>
+        <li><a href="map.html">แผนที่</a></li>
+        <li><a href="login.html">เข้าสู่ระบบ</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">© 2569 · จัดทำเพื่อการศึกษา / Educational project</div>
+</footer>
+
+<!-- ===================== SCRIPTS ===================== -->
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script src="js/background.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/data.js"></script>
+<script src="js/auth.js"></script>
+<script>
+  if (window.lucide) lucide.createIcons();
+  initLoginPage();
+</script>
+</body>
+</html>

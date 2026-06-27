@@ -149,7 +149,7 @@ function renderAlertBar(){
               : roc < 0 ? ("ไข่ลดลง " + Math.abs(pct) + "% จากครั้งก่อน")
               : "จำนวนไข่คงที่";
   document.getElementById("alertDetail").textContent =
-    `${trend} · นับได้ ${latest.eggCount} ฟอง — ${L.recoTh} (${L.recoEn})`;
+    `${trend} · ประมาณ ${eggRangeText(lv)} — ${L.recoTh} (${L.recoEn})`;
 }
 
 /* ---------------- Hero risk card ---------------- */
@@ -190,7 +190,9 @@ function renderHero(){
   document.getElementById("heroReco").childNodes[0].nodeValue = L.recoTh;
   document.getElementById("heroRecoEn").textContent = L.recoEn;
 
-  countUp(document.getElementById("eggNum"), latest.eggCount, lastEgg);
+  // DISPLAY-ONLY: show the egg-count RANGE figure (e.g. "100+"), not the raw
+  // class midpoint. "ฟอง" unit + the level name sit beside it in the card.
+  document.getElementById("eggNum").textContent = eggRangeFigure(lv);
   lastEgg = Number(latest.eggCount) || 0;
 
   const r = rocText(latest.rateOfChange);
@@ -214,7 +216,7 @@ function buildLadder(){
       '<span class="swatch"><i data-lucide="'+L.icon+'"></i></span>' +
       '<span class="lv-th">'+L.th+'</span>' +
       '<span class="lv-en">'+L.en+'</span>' +
-      '<span class="lv-range">'+L.range+'</span>';
+      '<span class="lv-range">'+eggRangeText(i)+'</span>';
     btn.addEventListener("click", ()=> toggleLadder(i));
     wrap.appendChild(btn);
   });
@@ -232,7 +234,7 @@ function toggleLadder(i){
   const L = LEVELS[i];
   det.style.color = L.color;
   det.innerHTML =
-    '<div class="lv-detail-th">'+L.th+' ('+L.en+') · '+L.range+'</div>' +
+    '<div class="lv-detail-th">'+L.th+' ('+L.en+') · '+eggRangeText(i)+'</div>' +
     '<div style="color:var(--ink)">'+L.recoTh+'<span class="en">'+L.recoEn+'</span></div>';
   det.classList.add("open");
 }
@@ -285,7 +287,7 @@ function renderChart(){
       labels,
       datasets:[
         {
-          label:"จำนวนไข่ / Eggs", data,
+          label:"ระดับไข่ (ประมาณ) / Egg level (approx.)", data,
           borderColor:CYAN, backgroundColor:grad,
           fill:true, tension:.35, borderWidth:2.5,
           pointBackgroundColor:colors, pointBorderColor:"#0D1525", pointBorderWidth:2,
@@ -312,16 +314,16 @@ function renderChart(){
           callbacks:{
             label:(c)=>{
               if (c.datasetIndex === 1) return "เกณฑ์เสี่ยง 31 ฟอง / Risk threshold";
-              const r = readings[c.dataIndex];
-              const L = LEVELS[resolveLevel(r)];
-              return `ไข่ ${r.eggCount} ฟอง · ${L.th} (${L.en})`;
+              // DISPLAY-ONLY: show level name + RANGE, not the raw midpoint
+              const lv = resolveLevel(readings[c.dataIndex]);
+              return eggRangeLabel(lv).th;   // e.g. "อันตราย (100+ ฟอง)"
             }
           }
         }
       },
       scales:{
         y:{ beginAtZero:true, grid:{ color:GRID }, border:{ color:GRID },
-            title:{ display:true, text:"จำนวนไข่ / Eggs", color:TXT, font:{family:"IBM Plex Sans Thai"} },
+            title:{ display:true, text:"ระดับไข่ (ประมาณ) / Egg level (approx.)", color:TXT, font:{family:"IBM Plex Sans Thai"} },
             ticks:{ color:TXT, font:{family:mono} } },
         x:{ grid:{ color:GRID }, border:{ color:GRID },
             ticks:{ color:TXT, font:{family:mono} } }

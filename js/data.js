@@ -11,16 +11,49 @@
    "Midnight Surveillance" palette: colors glow on navy and keep AA.
    `on` = dark text-on for chips/pills (light text fails AA on these
    luminous hues). `glow` = box-shadow tint. `icon` = Lucide name. */
+/* NOTE: egg-count ranges live in EGG_RANGES below (single source of truth);
+   use eggRangeText(level) for the per-level range string. */
 const LEVELS = [
-  { th:"ปลอดภัย",  en:"Safe",    color:"#2BD96B", glow:"rgba(43,217,107,.40)",  on:"#062012", icon:"shield-check",   range:"0 ฟอง",
+  { th:"ปลอดภัย",  en:"Safe",    color:"#2BD96B", glow:"rgba(43,217,107,.40)",  on:"#062012", icon:"shield-check",
     recoTh:"ยังไม่พบไข่ ตรวจตามปกติ",                  recoEn:"No eggs — routine check" },
-  { th:"เฝ้าระวัง", en:"Watch",   color:"#F4CE45", glow:"rgba(244,206,69,.40)",  on:"#2A2102", icon:"eye",            range:"1–30 ฟอง",
+  { th:"เฝ้าระวัง", en:"Watch",   color:"#F4CE45", glow:"rgba(244,206,69,.40)",  on:"#2A2102", icon:"eye",
     recoTh:"เริ่มมีไข่ คอยสังเกต",                     recoEn:"Eggs appearing — keep watching" },
-  { th:"เสี่ยง",    en:"At Risk", color:"#FB9A3E", glow:"rgba(251,154,62,.42)",  on:"#2A1602", icon:"triangle-alert", range:"31–100 ฟอง",
+  { th:"เสี่ยง",    en:"At Risk", color:"#FB9A3E", glow:"rgba(251,154,62,.42)",  on:"#2A1602", icon:"triangle-alert",
     recoTh:"ไข่เกินเกณฑ์ ควรกำจัดแหล่งน้ำขัง",         recoEn:"Above threshold — remove standing water" },
-  { th:"อันตราย",  en:"Danger",  color:"#FB6B6B", glow:"rgba(251,107,107,.45)", on:"#2A0707", icon:"siren",          range:"100+ ฟอง",
+  { th:"อันตราย",  en:"Danger",  color:"#FB6B6B", glow:"rgba(251,107,107,.45)", on:"#2A0707", icon:"siren",
     recoTh:"ไข่หนาแน่นมาก แจ้งเจ้าหน้าที่/อสม. ทันที", recoEn:"Very high — notify officials now" }
 ];
+
+/* ---------- Egg-count RANGES (DISPLAY ONLY) ----------
+   The classifier is 4-class, so the stored eggCount (0/15/65/150) is just a
+   class MIDPOINT — not a real count. We keep eggCount in Firebase for charting
+   but show these RANGES anywhere a number would otherwise look exact.
+   `figure` = short text for the hero card; `th`/`en` = range strings. */
+const EGG_RANGES = [
+  { figure:"0",      th:"0 ฟอง",      en:"0 eggs" },
+  { figure:"1–30",   th:"1–30 ฟอง",   en:"1–30"   },
+  { figure:"31–100", th:"31–100 ฟอง", en:"31–100" },
+  { figure:"100+",   th:"100+ ฟอง",   en:"100+"   }
+];
+/* Clamp any value to a valid 0–3 level index. */
+function _lvIdx(level){
+  const i = Number(level);
+  return (Number.isInteger(i) && i >= 0 && i <= 3) ? i : 0;
+}
+/* Short hero figure, e.g. "100+" (paired with the unit "ฟอง" in the card). */
+function eggRangeFigure(level){
+  return EGG_RANGES[_lvIdx(level)].figure;
+}
+/* Full Thai/English range label, e.g. {th:"อันตราย (100+ ฟอง)", en:"Danger (100+)"}. */
+function eggRangeLabel(level){
+  const i = _lvIdx(level);
+  return { th: LEVELS[i].th + " (" + EGG_RANGES[i].th + ")",
+           en: LEVELS[i].en + " (" + EGG_RANGES[i].en + ")" };
+}
+/* Just the range part, e.g. "100+ ฟอง" (no level name). */
+function eggRangeText(level){
+  return EGG_RANGES[_lvIdx(level)].th;
+}
 
 /* Re-render Lucide icons after dynamic DOM injection (no-op if CDN absent). */
 function refreshIcons(){

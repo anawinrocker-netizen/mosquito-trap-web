@@ -44,9 +44,9 @@ function buildMap(){
   legendCtrl.onAdd = function(){
     const div = L.DomUtil.create("div", "legend");
     let rows = "";
-    LEVELS.forEach(L => {
+    LEVELS.forEach((L,i) => {
       rows += '<div class="row"><span class="sw" style="background:'+L.color+'"></span>' +
-              '<span>'+L.th+' <span class="lg-en">'+L.en+' · '+L.range+'</span></span></div>';
+              '<span>'+L.th+' <span class="lg-en">'+L.en+' · '+eggRangeText(i)+'</span></span></div>';
     });
     div.innerHTML =
       '<h4>ระดับความเสี่ยง<span class="en">Risk Levels</span></h4>' + rows +
@@ -110,7 +110,7 @@ function renderMap(traps){
       '<div class="trap-pop">' +
         '<div class="pop-name">'+escapeHtml(t.name || "กับดัก")+'</div>' +
         '<span class="pop-level" style="background:'+L_.color+';color:'+L_.on+'">'+L_.th+' / '+L_.en+'</span>' +
-        '<div class="pop-row"><i data-lucide="egg"></i> ไข่: <b>'+(t.eggCount||0)+'</b> ฟอง</div>' +
+        '<div class="pop-row"><i data-lucide="egg"></i> ไข่ (ประมาณ): <b>'+eggRangeText(lv)+'</b></div>' +
         '<div class="pop-row"><i data-lucide="trending-up"></i> อัตราเปลี่ยนแปลง: <b>'+r.arrow+'</b></div>' +
         '<div class="pop-row"><i data-lucide="clock"></i> '+thRelative(t.ts)+'</div>' +
         '<div class="pop-reco">'+L_.recoTh+'<br><i>'+L_.recoEn+'</i></div>' +

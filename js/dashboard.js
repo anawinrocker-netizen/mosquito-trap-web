@@ -18,6 +18,10 @@ function initDashboard(user){
   buildLadder();
   bindStaticUI();
   attachListeners();
+  // Re-check camera online/offline every minute (the threshold is time-based,
+  // so status can change even with no new Firebase data).
+  renderCamStatus();
+  setInterval(renderCamStatus, 60000);
 }
 
 function bindStaticUI(){
@@ -28,8 +32,6 @@ function bindStaticUI(){
   document.getElementById("bell").addEventListener("click", ()=>{
     document.getElementById("alertList").scrollIntoView({ behavior:"smooth", block:"center" });
   });
-  const seedBtn = document.getElementById("seedBtn");
-  if (seedBtn) seedBtn.addEventListener("click", ()=> seedSampleData()); // from seed.js
 }
 
 /* ---------------- Realtime listeners ---------------- */
@@ -86,6 +88,7 @@ function renderDashboard(){
   // remove skeletons on first data tick
   document.querySelectorAll(".skeleton").forEach(s => s.classList.remove("skeleton"));
   renderHeaderMeta();
+  renderCamStatus();
   renderAlertBar();
   renderHero();
   renderLadder();
@@ -96,10 +99,26 @@ function renderDashboard(){
 
 function markEmpty(){
   document.querySelectorAll(".skeleton").forEach(s => s.classList.remove("skeleton"));
+  renderCamStatus();
   renderHero();      // shows empty-state text
   renderChart();
   renderAlerts();
   refreshIcons();
+}
+
+/* ---------------- Camera online/offline badge ---------------- */
+function renderCamStatus(){
+  const wrap = document.getElementById("camStatus");
+  if (!wrap) return;
+  const ts = DASH.latest ? DASH.latest.ts : null;
+  const s = camStatus(ts);                 // from data.js (shared with live page)
+  wrap.classList.toggle("live", s.online); // green dot when online
+  wrap.classList.toggle("off", !s.online); // red/grey dot when offline
+  const txt = document.getElementById("camText");
+  if (txt){
+    txt.textContent = ts ? ("กล้อง" + s.th + " · " + s.rel)
+                         : "กล้อง: ยังไม่มีข้อมูลจากกับดัก";
+  }
 }
 
 /* ---------------- Header meta (updated time + bell badge) ---------------- */

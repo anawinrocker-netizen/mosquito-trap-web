@@ -23,6 +23,7 @@
       <a href="index.html">หน้าแรก</a>
       <a href="dashboard.html" class="active">แดชบอร์ด</a>
       <a href="map.html">แผนที่</a>
+      <a href="live.html">กล้องสด</a>
     </div>
     <div class="nav-auth" id="navAuth"></div>
   </nav>
@@ -42,6 +43,11 @@
         </svg>
         <span class="badge" id="bellBadge" hidden>0</span>
       </button>
+      <!-- camera online/offline (based on age of /latest.ts; offline if >7h) -->
+      <div class="status-dot" id="camStatus" title="สถานะกล้อง / Camera status">
+        <span class="dot"></span>
+        <span id="camText">สถานะกล้อง —</span>
+      </div>
       <div class="status-dot" id="statusDot">
         <span class="dot"></span>
         <span id="statusText">กำลังเชื่อมต่อ / Connecting</span>
@@ -109,9 +115,6 @@
     <div class="card">
       <div class="card-head">
         <div class="card-title">ประวัติการแจ้งเตือน Telegram<span class="en">Telegram Alert History</span></div>
-        <button class="btn btn-outline btn-sm" id="seedBtn" title="เขียนข้อมูลตัวอย่างลง Firebase">
-          ใส่ข้อมูลตัวอย่าง <span class="en">Seed sample data</span>
-        </button>
       </div>
       <div class="alert-list" id="alertList">
         <div class="empty">กำลังโหลด…<span class="en">Loading…</span></div>
@@ -171,7 +174,8 @@
 <script src="js/firebase-config.js"></script>
 <script src="js/data.js"></script>
 <script src="js/auth.js"></script>
-<script src="js/seed.js"></script>
+<!-- seed.js (demo data) intentionally NOT loaded — dashboard shows REAL Firebase data only.
+     Re-add this line + the Seed button to re-enable sample data for testing. -->
 <script src="js/dashboard.js"></script>
 <script>
   // Draw static Lucide icons (nav, alert bar, footer).

@@ -100,6 +100,27 @@ function thShortDate(ts){
   return new Date(Number(ts)).toLocaleDateString("th-TH", { day:"numeric", month:"short" });
 }
 
+/* ---------- Camera online/offline status (shared by dashboard + live page) ----------
+   The trap captures every 6 hours, so we treat "no reading for >7h" as offline
+   to avoid false alarms. Threshold + helper live here so all pages agree. */
+const CAM_OFFLINE_MS = 25200000;   // 7 ชั่วโมง (25,200,000 มิลลิวินาที)
+
+function isCameraOnline(ts){
+  if (!ts) return false;
+  return (Date.now() - Number(ts)) < CAM_OFFLINE_MS;
+}
+/* Returns a ready-to-display status object for a /latest timestamp. */
+function camStatus(ts){
+  const online = isCameraOnline(ts);
+  return {
+    online,
+    th:  online ? "ออนไลน์" : "ออฟไลน์",
+    en:  online ? "Online"  : "Offline",
+    // relative time, e.g. "อัปเดตล่าสุดเมื่อ 2 ชั่วโมงที่แล้ว"
+    rel: ts ? ("อัปเดตล่าสุด" + thRelative(ts)) : "ยังไม่มีข้อมูลจากกับดัก"
+  };
+}
+
 /* ---------- Misc helpers ---------- */
 function escapeHtml(s){
   return String(s == null ? "" : s).replace(/[&<>"']/g, c => ({

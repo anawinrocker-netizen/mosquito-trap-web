@@ -3,13 +3,11 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>แผนที่ความเสี่ยง · กับดักยุงอัจฉริยะ</title>
+<title>กล้องสด · กับดักยุงอัจฉริยะ</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
@@ -24,17 +22,19 @@
     <div class="nav-links">
       <a href="index.html">หน้าแรก</a>
       <a href="dashboard.html">แดชบอร์ด</a>
-      <a href="map.html" class="active">แผนที่</a>
-      <a href="live.html">กล้องสด</a>
+      <a href="map.html">แผนที่</a>
+      <a href="live.html" class="active">กล้องสด</a>
     </div>
     <div class="nav-auth" id="navAuth"></div>
   </nav>
+
   <div class="subbar">
     <div class="subbar-inner">
-      <div class="page-title">แผนที่ความเสี่ยง<span class="en">Risk Map</span></div>
-      <div class="status-dot live" id="statusDot">
+      <div class="page-title">กล้องสด<span class="en">Live Camera</span></div>
+      <!-- camera online/offline (based on age of /latest.ts; offline if >7h) -->
+      <div class="status-dot" id="camStatus" title="สถานะกล้อง / Camera status">
         <span class="dot"></span>
-        <span id="statusText">เรียลไทม์ / Live</span>
+        <span id="camText">สถานะกล้อง —</span>
       </div>
     </div>
   </div>
@@ -42,20 +42,57 @@
 
 <main>
   <div class="wrap">
-    <!-- Summary strip -->
-    <div class="map-strip">
-      <h2>แผนที่ความเสี่ยงยุงลาย<span class="en">Aedes Risk Map</span></h2>
-      <div class="map-counts" id="mapCounts">กำลังโหลด… / Loading…</div>
-    </div>
+    <div class="live-grid">
 
-    <!-- Empty state note -->
-    <div class="map-empty" id="mapEmpty" hidden>
-      ยังไม่มีข้อมูลกับดักในระบบ — รออุปกรณ์ส่งข้อมูลเข้าระบบ
-      <span class="en">No trap data yet — waiting for devices to report</span>
-    </div>
+      <!-- LEFT: live image view -->
+      <div class="card glass-liquid cool">
+        <div class="card-title">กล้องสดจากกับดัก<span class="en">Live Camera Feed</span></div>
 
-    <!-- Leaflet map -->
-    <div id="map" role="region" aria-label="แผนที่ความเสี่ยงยุงลายของประเทศไทย"></div>
+        <!-- IP input + connect (IP remembered in localStorage) -->
+        <form id="camForm" class="cam-ip-row" autocomplete="off">
+          <div class="field">
+            <label for="camIpInput">IP กล้อง ESP32-CAM<span class="en">Camera IP</span></label>
+            <input class="input" id="camIpInput" type="text" inputmode="decimal"
+                   placeholder="10.56.64.182" aria-label="IP กล้อง ESP32-CAM" />
+          </div>
+          <button class="btn btn-primary" type="submit">
+            <i data-lucide="link"></i> เชื่อมต่อ <span class="en">Connect</span>
+          </button>
+        </form>
+
+        <!-- live frame: shows image, or placeholder/error states -->
+        <div class="live-frame">
+          <img id="liveImg" alt="ภาพสดจากกล้อง ESP32-CAM" hidden />
+          <div class="live-error" id="livePlaceholder">
+            <div class="ico"><i data-lucide="loader"></i></div>
+            กำลังเชื่อมต่อกล้อง…<span class="en">Connecting to camera…</span>
+          </div>
+          <div class="live-error" id="liveError" hidden>
+            <div class="ico"><i data-lucide="video-off"></i></div>
+            ไม่พบกล้อง — ตรวจว่ากล้องเปิดอยู่และอุปกรณ์ของคุณอยู่ในเครือข่าย WiFi เดียวกับกล้อง
+            <span class="en">Camera not found — make sure it's on and you're on the same WiFi</span>
+          </div>
+        </div>
+        <div class="live-stamp" id="liveStamp">—</div>
+
+        <!-- explanation: local IP only works on same WiFi -->
+        <div class="live-note">
+          <b>หมายเหตุ:</b> ภาพสดจะแสดงได้เฉพาะเมื่ออุปกรณ์ที่เปิดหน้านี้อยู่ใน
+          <b>เครือข่าย WiFi เดียวกับกล้อง</b> (เพราะกล้องใช้ IP ภายในเครือข่าย)
+          หากอยู่นอกเครือข่าย จะดูได้เฉพาะข้อมูลผล AI (ระดับ/การแจ้งเตือน) จากแดชบอร์ดเท่านั้น
+          <span class="en">Live view works only on the same local WiFi as the camera; from elsewhere, only the dashboard data (level/alerts) is available.</span>
+        </div>
+      </div>
+
+      <!-- RIGHT: latest AI result (works even if image can't load) -->
+      <div class="card">
+        <div class="card-title">ผลวิเคราะห์ล่าสุดจาก AI<span class="en">Latest AI Result</span></div>
+        <div id="aiResult">
+          <div class="empty">กำลังโหลด…<span class="en">Loading…</span></div>
+        </div>
+      </div>
+
+    </div>
   </div>
 </main>
 
@@ -91,6 +128,7 @@
         <li><a href="index.html">หน้าแรก</a></li>
         <li><a href="dashboard.html">แดชบอร์ด</a></li>
         <li><a href="map.html">แผนที่</a></li>
+        <li><a href="live.html">กล้องสด</a></li>
         <li><a href="login.html">เข้าสู่ระบบ</a></li>
       </ul>
     </div>
@@ -101,20 +139,21 @@
 <!-- ===================== SCRIPTS ===================== -->
 <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 <script src="js/background.js"></script>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-<script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+<script src="js/liquid.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 <script src="js/firebase-config.js"></script>
 <script src="js/data.js"></script>
 <script src="js/auth.js"></script>
-<script src="js/map.js"></script>
+<script src="js/live.js"></script>
 <script>
+  // Draw static Lucide icons (nav, footer, live frame).
   if (window.lucide) lucide.createIcons();
+
+  // Show user email + logout in nav; redirect to login if signed out.
   renderNavAuth(true);
-  requireAuth(function(user){ initMapPage(user); });
+  requireAuth(function(user){ initLivePage(user); });
 </script>
 </body>
 </html>
